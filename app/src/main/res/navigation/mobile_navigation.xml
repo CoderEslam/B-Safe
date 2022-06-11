@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_notificatiion"
-        android:name="com.doubleclick.b_safe.ui.gallery.NotificatiionFragment"
+        android:name="com.doubleclick.b_safe.ui.notification.NotificatiionFragment"
         android:label="@string/menu_notification"
         tools:layout="@layout/fragment_notificatiion" />
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.doubleclick.b_safe.ui.slideshow.ProfileFragment"
+        android:name="com.doubleclick.b_safe.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

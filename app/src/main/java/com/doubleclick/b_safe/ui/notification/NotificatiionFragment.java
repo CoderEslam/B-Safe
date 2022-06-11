@@ -1,4 +1,4 @@
-package com.doubleclick.b_safe.ui.slideshow;
+package com.doubleclick.b_safe.ui.notification;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,11 +10,12 @@ import androidx.fragment.app.Fragment;
 
 import com.doubleclick.b_safe.R;
 
-public class ProfileFragment extends Fragment {
+public class NotificatiionFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_notificatiion, container, false);
+
 
         return view;
     }

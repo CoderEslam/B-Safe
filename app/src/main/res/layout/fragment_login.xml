@@ -59,9 +59,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,9 +77,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="password" />
+            android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -94,12 +96,12 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/signin"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/bg_wihte"
-        android:text="Sign in"
+        android:text="@string/sign_in"
         android:textAllCaps="false"
         android:textColor="@color/drakred"
         app:layout_constraintEnd_toEndOf="parent"

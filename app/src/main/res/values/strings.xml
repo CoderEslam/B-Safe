@@ -19,4 +19,10 @@
     <string name="b_safe">B-Safe</string>
     <string name="services_distress"><![CDATA[Services & distress]]></string>
     <string name="forget_passwprd"><u>Forget Passwprd ?</u></string>
+    <string name="password">password</string>
+    <string name="email">Email</string>
+    <string name="vehicle_model">vehicle Model....</string>
+    <string name="confirm_password">confirm password....</string>
+    <string name="phone">phone....</string>
+    <string name="name">Name....</string>
 </resources>

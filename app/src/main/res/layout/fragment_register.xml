@@ -39,6 +39,8 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/name"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -52,7 +54,10 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/phone"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -65,6 +70,8 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/email"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phone" />
@@ -78,6 +85,8 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/password"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
@@ -91,6 +100,8 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/confirm_password"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
@@ -104,6 +115,8 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_wihte"
         android:drawableStart="@drawable/person"
+        android:hint="@string/vehicle_model"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confiremPassword" />
