@@ -7,4 +7,14 @@
     tools:context=".ui.home.HomeFragment">
 
 
+    <Button
+        android:id="@+id/sent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="43dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

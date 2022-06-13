@@ -7,6 +7,9 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
