@@ -11,6 +11,7 @@ public class User {
     private String phone;
     private String token;
     private String vehicleModel;
+    private String image;
 
     public User() {
     }
@@ -38,5 +39,9 @@ public class User {
 
     public String getVehicleModel() {
         return vehicleModel;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

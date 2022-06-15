@@ -12,4 +12,7 @@
     <color name="drakred">#3A0000</color>
     <color name="gray">#878787</color>
 
+    <color name="redlite">#FF3D3D</color>
+    <color name="reddark">#970000</color>
+
 </resources>

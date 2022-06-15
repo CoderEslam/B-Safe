@@ -25,4 +25,17 @@
     <string name="confirm_password">confirm password....</string>
     <string name="phone">phone....</string>
     <string name="name">Name....</string>
+    <string name="save_amp_edit"><![CDATA[Save & Edit]]></string>
+    <string name="google_maps_key">AIzaSyB3xpqtXugGT7-d82v2Sx2z0HedMZHKjiU</string>
+    <string name="Servies">Servies</string>
+    <string name="address">Address</string>
+    <string name="request">
+
+        -اضافه الصوره الشصيه
+        -اضافه صوره البطاقه الشخصيه
+        -اضافه صوره لمركز الصيانه
+        -اضافه صوره للبطاقه الضريبيه
+
+    </string>
+    <string name="upload">Upload</string>
 </resources>

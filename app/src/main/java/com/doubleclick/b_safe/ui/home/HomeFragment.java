@@ -10,13 +10,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.doubleclick.b_safe.Adapter.ServiceAdapter;
 import com.doubleclick.b_safe.R;
+import com.doubleclick.b_safe.ViewModel.ServiesCenterViewModel;
 import com.doubleclick.b_safe.databinding.FragmentHomeBinding;
 import com.doubleclick.b_safe.model.Data;
 import com.doubleclick.b_safe.model.MyResponse;
 import com.doubleclick.b_safe.model.Sender;
+import com.doubleclick.b_safe.model.ServiceCenter;
 import com.doubleclick.b_safe.model.User;
 import com.doubleclick.b_safe.notification.Api.APIService;
 import com.doubleclick.b_safe.notification.Client;
@@ -27,6 +32,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,17 +42,24 @@ public class HomeFragment extends Fragment {
 
     private DatabaseReference reference;
     private APIService apiService;
+    private ServiceAdapter serviceAdapter;
+    private RecyclerView centerService;
+    private ServiesCenterViewModel serviesCenterViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         reference = FirebaseDatabase.getInstance().getReference();
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-        view.findViewById(R.id.sent).setOnClickListener(new View.OnClickListener() {
+        centerService = view.findViewById(R.id.centerService);
+        serviesCenterViewModel = new ViewModelProvider(this).get(ServiesCenterViewModel.class);
+        serviesCenterViewModel.getServiceCenter().observe(getViewLifecycleOwner(), new Observer<ArrayList<ServiceCenter>>() {
             @Override
-            public void onClick(View view) {
-                sendNotifiaction("UAD1yzvdXOYGsQ1BDlRyJuYEK352");
+            public void onChanged(ArrayList<ServiceCenter> serviceCenters) {
+                serviceAdapter = new ServiceAdapter(serviceCenters);
+                centerService.setAdapter(serviceAdapter);
             }
         });
+
 
         return view;
     }
