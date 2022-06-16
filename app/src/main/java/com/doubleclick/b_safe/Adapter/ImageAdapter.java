@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.doubleclick.b_safe.R;
+import com.doubleclick.b_safe.Views.PhotoView.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +43,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageAdapter.ImageViewHolder holder, int position) {
-        if (type.equals("uri")){
+        if (type.equals("uri")) {
             Glide.with(holder.itemView.getContext()).load(uriArrayList.get(position)).into(holder.image);
-        }else {
+        } else {
             Glide.with(holder.itemView.getContext()).load(images.get(position)).into(holder.image);
         }
     }
@@ -59,7 +60,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
-        private ImageView image;
+        private PhotoView image;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);

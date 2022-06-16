@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,11 +27,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -42,6 +51,9 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
     private FusedLocationProviderClient client;
     private GoogleMap map;
     private LocationRequest locationRequest;
+    private DatabaseReference reference;
+    private ArrayList<String> urlImages = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +63,7 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
         pickup = findViewById(R.id.pickup);
         getLocation = findViewById(R.id.location);
         client = LocationServices.getFusedLocationProviderClient(this);
-
+        reference = FirebaseDatabase.getInstance().getReference();
 
         pickup.setOnClickListener(v -> {
             Intent intent = new Intent();
@@ -77,7 +89,7 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
                 for (int i = 0; i < clipData.getItemCount(); i++) {
                     uriArrayList.add(clipData.getItemAt(i).getUri());
                 }
-                images.setAdapter(new ImageAdapter(uriArrayList,"uri"));
+                images.setAdapter(new ImageAdapter(uriArrayList, "uri"));
             }
         }
 
@@ -101,12 +113,60 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
             public void onSuccess(Location location) {
                 if (location != null) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Upload(latLng);
                     Log.e("LOCATIONJOINUS", latLng.toString());
                 } else {
                     Toast.makeText(JoinUsActivity.this, "Open your location", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void Upload(LatLng latLng) {
+        if (uriArrayList.size() != 0) {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.show();
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Requests");
+            for (Uri uri : uriArrayList) {
+                storageReference.child("" + System.currentTimeMillis() + ".jpg").putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                    Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
+                    task.addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Log.e("URLLLLLL", task.getResult().toString());
+                                urlImages.add(task.getResult().toString());
+                                if (uriArrayList.size() == urlImages.size()) {
+                                    String id = reference.push().getKey().toString();
+                                    HashMap<String, Object> map = new HashMap<>();
+                                    map.put("images", urlImages.toString());
+                                    map.put("location","["+latLng.latitude+","+latLng.longitude+"]");
+                                    map.put("id", id);
+                                    reference.child("Requstes").child(id).setValue(map);
+                                    progressDialog.dismiss();
+                                }
+                            }
+                        }
+                    });
+
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double p = 100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
+                        progressDialog.setMessage(p + " % Uploading...");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(JoinUsActivity.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+
+
+        }
+
     }
 
     @Override

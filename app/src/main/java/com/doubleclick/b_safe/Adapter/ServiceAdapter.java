@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.doubleclick.b_safe.R;
 import com.doubleclick.b_safe.model.ServiceCenter;
+import com.mig35.carousellayoutmanager.CarouselLayoutManager;
+import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.mig35.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
 
@@ -60,6 +63,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
             name = view.findViewById(R.id.name);
             rate = view.findViewById(R.id.rate);
             phone = view.findViewById(R.id.phone);
+            CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+            image.setLayoutManager(layoutManager);
+            image.setHasFixedSize(true);
+            image.addOnScrollListener(new CenterScrollListener());
+            layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
 
         }
     }
