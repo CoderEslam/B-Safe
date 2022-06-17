@@ -20,7 +20,10 @@ public class ServiesCenterViewModel extends ViewModel implements ServiesCenterRe
     ServiesCenterRepository serviesCenterRepository = new ServiesCenterRepository(this);
 
     public ServiesCenterViewModel() {
-        serviesCenterRepository.getServiceCenter();
+    }
+
+    public void Search(String name) {
+        serviesCenterRepository.getServiceCenter(name);
     }
 
     public LiveData<ArrayList<ServiceCenter>> getServiceCenter() {

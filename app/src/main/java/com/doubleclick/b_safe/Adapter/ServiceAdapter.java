@@ -1,5 +1,6 @@
 package com.doubleclick.b_safe.Adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.doubleclick.b_safe.R;
+import com.doubleclick.b_safe.ServiceCenterActivity;
 import com.doubleclick.b_safe.model.ServiceCenter;
 import com.mig35.carousellayoutmanager.CarouselLayoutManager;
 import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener;
@@ -42,8 +44,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
     public void onBindViewHolder(@NonNull ServiceAdapter.ServiceViewHolder holder, int position) {
         holder.image.setAdapter(new ImageAdapter("", serviceCenters.get(position).getImages()));
         holder.name.setText(String.format("%s-%s", serviceCenters.get(position).getName(), serviceCenters.get(position).getAddress()));
-        holder.rate.setRating(serviceCenters.get(position).getRate());
         holder.phone.setText(serviceCenters.get(position).getPhone());
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(holder.itemView.getContext(), ServiceCenterActivity.class);
+            intent.putExtra("serviceCenter", serviceCenters.get(position));
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -55,13 +61,11 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
 
         private RecyclerView image;
         private TextView name, phone;
-        private RatingBar rate;
 
         public ServiceViewHolder(@NonNull View view) {
             super(view);
             image = view.findViewById(R.id.image);
             name = view.findViewById(R.id.name);
-            rate = view.findViewById(R.id.rate);
             phone = view.findViewById(R.id.phone);
             CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
             image.setLayoutManager(layoutManager);

@@ -1,14 +1,18 @@
 package com.doubleclick.b_safe.ui.Servies;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,15 +22,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.doubleclick.b_safe.Adapter.ImageAdapter;
+import com.doubleclick.b_safe.JoinUsActivity;
 import com.doubleclick.b_safe.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
@@ -52,6 +62,9 @@ public class ServiesFragment extends Fragment {
     private ArrayList<String> urlImages = new ArrayList<>();
     private FloatingActionButton pickup;
     private Button upload;
+    private Switch myLocationSwitch;
+    private FusedLocationProviderClient client;
+    private LatLng latLng;
 
     private DatabaseReference reference;
 
@@ -65,7 +78,9 @@ public class ServiesFragment extends Fragment {
         name = view.findViewById(R.id.nameOfPlace);
         address = view.findViewById(R.id.address);
         pickup = view.findViewById(R.id.pickup);
+        client = LocationServices.getFusedLocationProviderClient(requireActivity());
         upload = view.findViewById(R.id.upload);
+        myLocationSwitch = view.findViewById(R.id.myLocationSwitch);
         pickup.setOnClickListener(view1 -> {
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -78,7 +93,11 @@ public class ServiesFragment extends Fragment {
             Upload();
         });
 
-
+        myLocationSwitch.setOnClickListener(v -> {
+            if (myLocationSwitch.isChecked()) { // -> true
+                getMyLocation();
+            }
+        });
         return view;
     }
 
@@ -94,7 +113,6 @@ public class ServiesFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                Log.e("URLLLLLL", task.getResult().toString());
                                 urlImages.add(task.getResult().toString());
                                 if (uriArrayList.size() == urlImages.size()) {
                                     String id = reference.push().getKey().toString();
@@ -104,6 +122,8 @@ public class ServiesFragment extends Fragment {
                                     map.put("phone", phone.getText().toString());
                                     map.put("images", urlImages.toString());
                                     map.put("id", id);
+                                    map.put("ServiceOwner", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                    map.put("location", "[" + latLng.longitude + "," + latLng.latitude + "]");
                                     reference.child("CenterServies").child(id).setValue(map);
                                     progressDialog.dismiss();
                                 }
@@ -116,7 +136,6 @@ public class ServiesFragment extends Fragment {
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                         double p = 100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
                         progressDialog.setMessage(p + " % Uploading...");
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -146,4 +165,31 @@ public class ServiesFragment extends Fragment {
         }
 
     }
+
+
+    private void getMyLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Log.e("LOCATIONJOINUS", latLng.toString());
+                } else {
+                    Toast.makeText(requireContext(), "Open your location", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 }

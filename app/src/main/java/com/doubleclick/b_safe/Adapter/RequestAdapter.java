@@ -22,11 +22,18 @@ import java.util.ArrayList;
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
 
 
-    private ArrayList<Requests> requestsArrayList;
-
-    public RequestAdapter(ArrayList<Requests> requestsArrayList) {
+    public void setRequestsArrayList(ArrayList<Requests> requestsArrayList) {
         this.requestsArrayList = requestsArrayList;
     }
+
+    private ArrayList<Requests> requestsArrayList;
+
+    public void setCheck(Check check) {
+        this.check = check;
+    }
+
+    Check check;
+
 
     @NonNull
     @Override
@@ -38,10 +45,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
     public void onBindViewHolder(@NonNull RequestAdapter.RequestViewHolder holder, int position) {
         holder.attchementImage.setAdapter(new ImageAdapter("", requestsArrayList.get(position).getImages()));
         holder.yes.setOnClickListener(view -> {
-
+            check.Yes(requestsArrayList.get(position).getId(),requestsArrayList.get(position).getCustumerId());
         });
         holder.no.setOnClickListener(view -> {
-
+            check.No(requestsArrayList.get(position).getId());
         });
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(holder.itemView.getContext(), ViewRequestActivity.class);
@@ -65,6 +72,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             yes = itemView.findViewById(R.id.animationViewyes);
             no = itemView.findViewById(R.id.animationViewNo);
         }
+    }
 
+    public interface Check {
+        void Yes(String id,String custumerId);
+
+        void No(String id);
     }
 }

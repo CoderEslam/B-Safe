@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -48,11 +49,11 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
     private FloatingActionButton pickup;
     private Button getLocation;
     private ArrayList<Uri> uriArrayList = new ArrayList<>();
-    private FusedLocationProviderClient client;
     private GoogleMap map;
     private LocationRequest locationRequest;
     private DatabaseReference reference;
     private ArrayList<String> urlImages = new ArrayList<>();
+    private FusedLocationProviderClient client;
 
 
     @Override
@@ -140,8 +141,9 @@ public class JoinUsActivity extends AppCompatActivity implements OnMapReadyCallb
                                     String id = reference.push().getKey().toString();
                                     HashMap<String, Object> map = new HashMap<>();
                                     map.put("images", urlImages.toString());
-                                    map.put("location","["+latLng.latitude+","+latLng.longitude+"]");
+                                    map.put("location", "[" + latLng.latitude + "," + latLng.longitude + "]");
                                     map.put("id", id);
+                                    map.put("CustumerId", FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
                                     reference.child("Requstes").child(id).setValue(map);
                                     progressDialog.dismiss();
                                 }

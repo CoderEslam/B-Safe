@@ -1,10 +1,16 @@
 package com.doubleclick.b_safe.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,13 +51,22 @@ public class HomeFragment extends Fragment {
     private ServiceAdapter serviceAdapter;
     private RecyclerView centerService;
     private ServiesCenterViewModel serviesCenterViewModel;
+    private Button police, Ambulance, fireFighting;
+    private EditText search;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         reference = FirebaseDatabase.getInstance().getReference();
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         centerService = view.findViewById(R.id.centerService);
+        police = view.findViewById(R.id.police);
+        Ambulance = view.findViewById(R.id.Ambulance);
+        fireFighting = view.findViewById(R.id.fireFighting);
+        search = view.findViewById(R.id.search);
+
+
         serviesCenterViewModel = new ViewModelProvider(this).get(ServiesCenterViewModel.class);
+        serviesCenterViewModel.Search("");
         serviesCenterViewModel.getServiceCenter().observe(getViewLifecycleOwner(), new Observer<ArrayList<ServiceCenter>>() {
             @Override
             public void onChanged(ArrayList<ServiceCenter> serviceCenters) {
@@ -59,11 +74,43 @@ public class HomeFragment extends Fragment {
                 centerService.setAdapter(serviceAdapter);
             }
         });
+        police.setOnClickListener(v -> {
+            call("01221930858");
+        });
+        Ambulance.setOnClickListener(v -> {
+            call("");
+        });
+        fireFighting.setOnClickListener(v -> {
+            call("");
+        });
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                serviesCenterViewModel.Search(charSequence.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
         return view;
     }
 
+    private void call(String num) {
+        String uri = "tel:" + num.trim();
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
+    }
 
     public void sendNotifiaction(String receiver) {
         reference.child("Users").child(receiver).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

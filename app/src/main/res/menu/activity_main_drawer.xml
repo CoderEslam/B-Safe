@@ -11,11 +11,13 @@
         <item
             android:id="@+id/nav_notificatiion"
             android:icon="@drawable/notifications"
-            android:title="@string/menu_notification" />
+            android:title="@string/menu_notification"
+            android:visible="false" />
         <item
             android:id="@+id/nav_service"
             android:icon="@drawable/services"
-            android:title="@string/Servies" />
+            android:title="@string/Servies"
+            android:visible="false" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/person"

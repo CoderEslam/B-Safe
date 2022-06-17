@@ -23,11 +23,12 @@ public class ServiesCenterRepository {
         this.getCenters = getCenters;
     }
 
-    public void getServiceCenter() {
+    public void getServiceCenter(String name) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("CenterServies");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.orderByChild("name").startAt(name).endAt(name + "\uf8ff").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                centers.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ServiceCenter center = dataSnapshot.getValue(ServiceCenter.class);
                     centers.add(center);

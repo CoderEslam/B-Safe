@@ -11,6 +11,9 @@ public class Requests implements Serializable {
 
     private String images;
     private String location;
+    private String id;
+    private String CustumerId;
+
 
     public List<String> getImages() {
         List<String> image = Arrays.asList(images.replace("[", "").replace("]", "").replace(" ", "").split(","));
@@ -28,5 +31,13 @@ public class Requests implements Serializable {
                 "images='" + images + '\'' +
                 ", location='" + location + '\'' +
                 '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCustumerId() {
+        return CustumerId;
     }
 }
