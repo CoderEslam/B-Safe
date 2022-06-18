@@ -18,39 +18,35 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     public FirebaseAuth.AuthStateListener authStateListener;
-    public FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
-        currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            authStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
-            };
-        }
+            }
+        };
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (currentUser != null) {
-            auth.addAuthStateListener(authStateListener);
-        }
+        auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (currentUser != null) {
-            auth.removeAuthStateListener(authStateListener);
-        }
+        auth.removeAuthStateListener(authStateListener);
     }
 
 }
